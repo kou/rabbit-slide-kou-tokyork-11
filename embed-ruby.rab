@@ -1,0 +1,38 @@
+= Embed Ruby
+
+: subtitle
+   アプリケーションへの\n
+   Rubyインタープリターの組み込み
+: author
+   須藤功平
+: institution
+   株式会社クリアコード
+: content-source
+   東京Ruby会議11
+: date
+   2016-05-28
+: allotted-time
+   30m
+: theme
+   clear-code
+
+= Speaker's award
+
+Continuous development award
+
+  * 受賞者：cedlemo
+  * 受賞理由：2015年1月から継続的にRuby-GNOME2の開発に参加しているから。\n
+    とても助かっています。
+
+= 宣伝：OSS Gate
+
+  * OSS開発に参加する人を増やす取り組み
+  * ...
+
+
+
+= 二番目のスライド
+
+  # image
+  # src = https://raw.github.com/rabbit-shocker/rabbit/master/sample/lavie.png
+  # relative_height = 100
