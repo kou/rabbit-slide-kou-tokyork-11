@@ -20,19 +20,122 @@
 
 Continuous development award
 
-  * 受賞者：cedlemo
-  * 受賞理由：2015年1月から継続的にRuby-GNOME2の開発に参加しているから。\n
-    とても助かっています。
+= 受賞者
 
-= 宣伝：OSS Gate
+(('tag:center'))
+(('tag:x-large'))
+cedlemo
 
-  * OSS開発に参加する人を増やす取り組み
-  * ...
+(('tag:center'))
+(('note:Continuous development award'))
 
+= 受賞理由
 
+(('tag:center'))
+(('tag:large'))
+2015年1月から継続的に\n
+Ruby-GNOME2の開発に\n
+参加しているから
 
-= 二番目のスライド
+(('tag:center'))
+(('note:一発すごい改善をした人よりも'))\n
+(('note:小さくても継続的に改善している人を評価したい'))
 
-  # image
-  # src = https://raw.github.com/rabbit-shocker/rabbit/master/sample/lavie.png
-  # relative_height = 100
+(('tag:center'))
+(('note:Continuous development award'))\n
+(('note:cedlemo'))
+
+= 宣伝
+
+OSS Gate
+
+= OSS Gate
+
+OSS開発に\n
+参加する人を\n
+増やす取り組み
+
+= 背景
+
+  * OSS利用は当たり前になった
+    * →OSS利用者増加
+  * 開発参加者も増えるといいな
+
+(('tag:center'))
+(('note:OSS Gate'))
+
+= OSS開発参加
+
+  * すごい改善じゃなくていい
+  * バグレポートとかでいい
+    * typo見つけました！とかでもいい
+
+(('tag:center'))
+(('note:OSS Gate'))
+
+= 動機
+
+(('tag:center'))
+(('tag:large'))
+OSS Gate参加者それぞれ
+
+(('tag:center'))
+(('note:OSS Gate'))
+
+= 私の動機
+
+(('tag:center'))
+↓となるといいな
+
+  * Twitterでグチる人たちが\n
+    開発元に報告するようになって
+  * 次に利用する人が困らなくなる
+
+(('tag:center'))
+(('note:OSS Gate'))
+
+= 興味ある？
+
+  * 興味？（重要：動機不問）
+    * OSS開発に参加したい！
+    * OSS開発参加者を増やしたい！
+  * 5Fでワークショップ開催中
+    * 見学したい人は私に一声かけて
+
+(('tag:center'))
+(('note:OSS Gate'))
+
+= 本題
+
+Rubyの組み込み\n
+(('note:（CアプリケーションへのRubyインタープリターの組み込み）'))
+
+= 動機
+
+  * Rubyの記述力が欲しい
+  * (('wait'))Cの速さが欲しい
+  * (('wait'))Ruby以外の言語からも使いたい
+    * Cの共有ライブラリーは連携しやすい
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
+
+= 別の実現方法
+
+(('tag:center'))
+(('tag:large'))
+拡張ライブラリー
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
+
+= 拡張ライブラリー
+
+  * 実現可能：
+    * (('wait'))Rubyの記述力が欲しい
+    * (('wait'))Cの速さが欲しい
+  * 実現不可能：
+    * (('wait'))Ruby以外の言語からも使いたい
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
