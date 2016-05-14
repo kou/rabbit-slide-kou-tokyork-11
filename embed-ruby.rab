@@ -112,10 +112,11 @@ Rubyの組み込み\n
 
 = 動機
 
-  * Rubyの記述力が欲しい
+  * 柔軟な記述力が欲しい
   * (('wait'))Cの速さが欲しい
-  * (('wait'))Ruby以外の言語からも使いたい
-    * Cの共有ライブラリーは連携しやすい
+  * (('wait'))Ruby以外の言語とも連携したい
+    * Pythonも組み込む
+  * (('wait'))なんかカッコいい
 
 (('tag:center'))
 (('note:Rubyの組み込み'))
@@ -129,13 +130,154 @@ Rubyの組み込み\n
 (('tag:center'))
 (('note:Rubyの組み込み'))
 
-= 拡張ライブラリー
+= 組み込み(('note:と'))拡張ライブラリー
 
-  * 実現可能：
-    * (('wait'))Rubyの記述力が欲しい
-    * (('wait'))Cの速さが欲しい
-  * 実現不可能：
-    * (('wait'))Ruby以外の言語からも使いたい
+  # image
+  # src = images/embed-and-extension.svg
+  # relative_width = 90
 
 (('tag:center'))
 (('note:Rubyの組み込み'))
+
+= 拡張ライブラリー
+
+  * 実現可能：
+    * (('wait'))柔軟な記述力が欲しい
+    * (('wait'))Cの速さが欲しい
+  * 実現不可能：
+    * (('wait'))Ruby以外の言語とも連携したい
+    * (('wait'))なんかカッコいい感
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
+
+= 実現方法の選び方
+
+  * (('wait'))基本は拡張ライブラリー
+  * (('wait'))すでにあるアプリなら組み込み
+  * (('wait'))選びたい方があるならそっち
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
+
+= 組み込みを選ぶ時の注意
+
+(('tag:center'))
+(('wait'))それなりの覚悟が必要
+
+  * (('wait'))利用例があまりない
+    * 問題遭遇確率が高い
+  * (('wait'))問題遭遇時：
+    * 自分でソースを読んで調べる
+    * 詳しい人に相談\n
+      (('note:ささださん＜できればサポートを強化したい'))
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
+
+= 組み込み方（実装）を紹介
+
+実例\n
+milter manager
+
+= milter manager
+
+  # image
+  # src = images/milter-manager-overview.svg
+  # relative_width = 90
+
+(('wait'))
+(('tag:center'))
+milterを管理するmilter
+
+= ポイント
+
+    # image
+    # src = images/milter-manager-overview.svg
+    # relative_width = 40
+    # relative_margin_right = -10
+    # relative_margin_top = 30
+    # align = right
+
+  * milterを管理する\n
+    milter
+  * サーバープロセス
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= Ruby組み込みの実装
+
+  * 初期化
+  * fork対応
+  * イベントループ
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 初期化：GC関連
+
+  # coderay c
+  {
+    /* スタックの底を設定 */
+    /* GC時にCのローカル変数に代入されている
+       Rubyのオブジェクトをマークするため */
+    RUBY_INIT_STACK;
+    /* ... */
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 回収される例
+
+  # coderay c
+  {
+    RUBY_INIT_STACK;
+    /* ... */
+    {
+      VALUE object = rb_ary_new(); /* マーク対象 */
+    }
+  }
+  {
+    VALUE object = rb_ary_new(); /* マーク対象外 */
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 確認例
+
+  # coderay c
+  #define MARKED_P(object) rb_objspace_marked_object_p(object)
+  {
+    RUBY_INIT_STACK;
+    {
+      VALUE object = rb_ary_new();
+      /* GC.start(immediate_sweep: false) */
+      printf("%d\n", MARKED_P(object)); /* => 1 */
+    }
+  }
+  {
+    VALUE object = rb_ary_new();
+    /* GC.start(immediate_sweep: false) */
+    printf("%d\n", MARKED_P(object));   /* => 0 */
+  }
+
+(('tag:center'))
+(('note:スライドのリポジトリー:examples/gc.c'))
+
+= 利用例
+
+  * (('wait'))大学・企業
+    * ユーザー数：数百〜数万人
+  * (('wait'))プロバイダー
+    * ユーザー数：数千〜数十万人
+
+(('wait'))
+(('tag:center'))
+それなりの性能が必要
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
