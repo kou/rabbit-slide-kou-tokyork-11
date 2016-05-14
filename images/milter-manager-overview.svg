@@ -16,7 +16,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="milter-manager.svg">
+   sodipodi:docname="milter-manager-overview.svg">
   <defs
      id="defs4">
     <marker
@@ -762,15 +762,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="577.55033"
-     inkscape:cy="26.194149"
+     inkscape:cx="203.9789"
+     inkscape:cy="23.337006"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="1920"
-     inkscape:window-y="27"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      showguides="true"
      fit-margin-top="5"
@@ -830,15 +830,15 @@
     <text
        sodipodi:linespacing="125%"
        id="text4810"
-       y="463.79077"
+       y="422.36221"
        x="442.99942"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          id="tspan4814"
-         y="463.79077"
+         y="422.36221"
          x="442.99942"
          sodipodi:role="line">milter</tspan><tspan
-         y="513.79077"
+         y="472.36221"
          x="442.99942"
          sodipodi:role="line"
          id="tspan4826">manager</tspan></text>
@@ -1596,5 +1596,25 @@
          id="tspan12749"
          x="64.481544"
          y="691.59839">milter</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#a40000;stroke-width:2.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4417"
+       width="154.28571"
+       height="55.714294"
+       x="369.42633"
+       y="512.63824"
+       rx="5"
+       ry="5" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="409.4263"
+       y="554.06683"
+       id="text4419"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4421"
+         x="409.4263"
+         y="554.06683">Ruby</tspan></text>
   </g>
 </svg>

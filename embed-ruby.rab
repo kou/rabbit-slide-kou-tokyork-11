@@ -12,7 +12,7 @@
 : date
    2016-05-28
 : allotted-time
-   30m
+   25m
 : theme
    clear-code
 
@@ -178,7 +178,8 @@ Rubyの組み込み\n
 = 組み込み方（実装）を紹介
 
 実例\n
-milter manager
+milter manager\n
+(('note:Since 2008'))
 
 = milter manager
 
@@ -189,22 +190,6 @@ milter manager
 (('wait'))
 (('tag:center'))
 milterを管理するmilter
-
-= ポイント
-
-    # image
-    # src = images/milter-manager-overview.svg
-    # relative_width = 40
-    # relative_margin_right = -10
-    # relative_margin_top = 30
-    # align = right
-
-  * milterを管理する\n
-    milter
-  * サーバープロセス
-
-(('tag:center'))
-(('note:milter managerへのRubyの組み込み'))
 
 = Ruby組み込みの実装
 
@@ -267,7 +252,156 @@ milterを管理するmilter
 (('tag:center'))
 (('note:スライドのリポジトリー:examples/gc.c'))
 
-= 利用例
+= GC関連の注意
+
+  # coderay c
+  {
+    RUBY_INIT_STACK;
+    /* Rubyのオブジェクトを触る
+       Cのコードはこのブロック内でだけ使うこと */
+    /* Cからのコールバックで
+       Rubyのコードを呼び出すときは注意 */
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 初期化：シグナル関連
+
+  # coderay c
+  {
+    RUBY_INIT_STACK;
+    /* シグナルハンドラーを保存 */
+    ruby_init(); /* Rubyがシグナルハンドラーを登録 */
+    /* シグナルハンドラーを復帰 */
+    /* シグナルはアプリで処理したいから */
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= シグナル復帰例
+
+  # coderay c
+  {
+    /* 他のシグナルも同様に復帰 */
+    void (*sigint_handler)(int);
+    sigint_handler = signal(SIGINT, SIG_DFL);
+    ruby_init();
+    signal(SIGINT, sigint_handler);
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 初期化：引数の処理
+
+  # coderay c
+  {
+    /* ...ruby_init()... */
+    static char *argv_raw[] = {"milter-manager", "-e;"};
+    int argc;
+    char **argv;
+    argc = sizeof(argv_raw) / sizeof(char *);
+    argv = argv_raw;
+    ruby_incpush(/* ... */); /* $LOAD_PATHの設定 */
+    /* 中でいろいろ初期化するのでダミーの引数で呼ぶ */
+    ruby_process_options(argc, argv);
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 初期化：アプリの初期化
+
+  # coderay c
+  {
+    /* ...ruby_process_options()... */
+    /* require中に例外が発生してもここで止める */
+    /* ここで止めないと例外を受け取る人がいなくて
+       クラッシュ */
+    rb_protect(/* rb_require("milter/manager") */);
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= milter managerとRuby
+
+  * 組み込み処理系の1つ
+    * Pythonも使えるようにしたかった\n
+      (('note:結局Ruby必須でPython対応はしなかった'))
+  * (('wait'))起動後に(({dlopen()}))で動的にsoを読み込んで組み込み
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 起動時に動的に組み込み
+
+  # image
+  # src = images/milter-manager-and-ruby.svg
+  # relative_width = 90
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= 起動時にso読んで組み込み
+
+  # coderay c
+  {
+    /* ↓GC用 */
+    RUBY_INIT_STACK;
+    /* 動的にsoを読んで初期化関数を呼ぶ */
+    /* dlopen();
+       init = dlsym();
+       init(); ←の中でruby_init();とか */
+    /* アプリの処理 */
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= RUBY_INIT_STACK！？
+
+  # coderay c
+  {
+    /* ↓アプリ側で呼ぶの！？ */
+    RUBY_INIT_STACK;
+    /* 動的にsoを読んで初期化関数を呼ぶ */
+    /* dlopen();
+       init = dlsym();
+       init(); ←の中でruby_init();とか */
+    /* アプリの処理 */
+  }
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= アプリにｰlruby…
+
+  # image
+  # src = images/milter-manager-and-ruby-real.svg
+  # relative_width = 90
+
+(('tag:center'))
+(('note:カッコわるい。。。'))\n
+(('note:milter managerへのRubyの組み込み'))
+
+= Ruby組み込み時の意気込み
+
+  * 本体に組み込む
+  * 動的に組み込もうとしない
+
+= Ruby組み込みの実装
+
+  * (('del:初期化'))
+  * fork対応
+  * イベントループ
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= milter manager利用例
 
   * (('wait'))大学・企業
     * ユーザー数：数百〜数万人
@@ -281,3 +415,152 @@ milterを管理するmilter
 (('tag:center'))
 (('note:milter managerへのRubyの組み込み'))
 
+= 性能向上方法
+
+  * CPU
+    * マルチプロセス1択
+  * 通信・同時接続
+    * いろいろ
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= マルチプロセス
+
+  * (('wait'))マスタープロセス
+    * (({listen()}))
+    * (({fork()}))
+  * (('wait'))ワーカープロセス
+    * (({accept()}))
+    * ↑のクライアントの処理
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= Ruby組み込みと(({fork()}))
+
+  * ワーカープロセスがクラッシュ
+    * プロセス終了時とか
+  * (('wait'))ヒント：(({fork()}))とスレッド
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= (({fork()}))とスレッド
+
+  * 混ぜるな危険
+  * (('wait'))Rubyはスレッドを動かしている
+    * 例：タイマースレッド
+  * (('wait'))(({fork}))時にスレッドのケアが必要
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= スレッドのケア
+
+  # coderay c
+  VALUE pid;
+  /* タイマースレッドの後始末とか
+     した上でfork */
+  pid = rb_funcall(rb_mKernel,
+                   rb_intern("fork"),
+                   0);
+  return NUM2INT(pid);
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= Ruby組み込みの実装
+
+  * (('del:初期化'))
+  * (('del:fork対応'))
+  * イベントループ
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
+= Rubyの組み込みのまとめ
+
+  * Rubyを組み込む実装方法を紹介
+  * (('wait'))動的組み込みは諦めろ
+  * (('wait'))(({fork}))時はRubyの(({fork}))を使う
+
+(('tag:center'))
+(('note:Rubyの組み込み'))
+
+= おまけ
+
+mrubyの組み込み
+
+= GroongaとmrubyとGC
+
+  * Groonga
+    * 全文検索エンジン（mruby組み込み）
+    * (('wait'))高速に検索結果を返し続けたい
+    * (('wait'))リソース消費は波がない方がよい\n
+      (('note:例：いらなくなったメモリーはすぐに解放'))
+  * (('wait'))GC
+    * メモリーが足りなくなったら解放
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= GroongaでのGCの方針
+
+  * mrubyのGCにGroongaのリソース管理を任せない
+    * リソース管理：\n
+      mrubyのオブジェクトのsweep時にGroongaのリソースを解放
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= mrubyのGCとリソース
+
+  * mrubyのGC
+    * Groongaリソースのサイズを知らない
+    * 適切なタイミングでsweepできない
+    * (('wait'))(('note:RubyのGCも同じ'))
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= 実例1: 明示的な解放
+
+  # coderay ruby
+
+  # 検索
+  result = table.search(condition)
+  begin
+    output_result(result) # 出力
+  ensure
+    result.close # 明示的な解放
+  end
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= 実例2: 所有権を渡さない
+
+  # coderay c
+
+  /* Groonga側でリソース確保 */
+  expr = grn_expr_create(/* ... */);
+  /* mrubyのオブジェクトとしてラップ */
+  mrb_expr = grn_mrb_value_from_grn_obj(mrb, expr);
+  /* mruby側は参照して処理する */
+  mrb_size = mrb_funcall(mrb, mrb_expr,
+                         "estimate_size", 1, mrb_table);
+  /* Groonga側でリソース解放 */
+  grn_expr_close(expr);
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= mruby組み込みのまとめ
+
+  * GCに任せないという選択
+    * リソース消費を安定させるため
+    * 安定した性能を出すため
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
