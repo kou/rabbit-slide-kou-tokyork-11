@@ -59,7 +59,8 @@ OSS開発に\n
 
   * OSS利用は当たり前になった
     * →OSS利用者増加
-  * 開発参加者も増えるといいな
+  * (('wait'))開発参加者も増えるといいな
+    * →OSS増加
 
 (('tag:center'))
 (('note:OSS Gate'))
@@ -84,12 +85,11 @@ OSS Gate参加者それぞれ
 
 = 私の動機
 
-(('tag:center'))
-↓となるといいな
-
-  * Twitterでグチる人たちが\n
-    開発元に報告するようになって
-  * 次に利用する人が困らなくなる
+  * ユーザーが自由に使える\n
+    ソフトウェアが増えるといいな
+  * 自由に使える例：
+    * (('wait'))コードを読んで学習できる
+    * (('wait'))今日聞いた話の実装を確認できる！
 
 (('tag:center'))
 (('note:OSS Gate'))
@@ -99,7 +99,7 @@ OSS Gate参加者それぞれ
   * 興味？（重要：動機不問）
     * OSS開発に参加したい！
     * OSS開発参加者を増やしたい！
-  * 5Fでワークショップ開催中
+  * 5階でワークショップ開催中
     * 見学したい人は私に一声かけて
 
 (('tag:center'))
@@ -419,7 +419,7 @@ milterを管理するmilter
 
   * CPU
     * マルチプロセス1択
-  * 通信・同時接続
+  * 通信・多同時接続
     * いろいろ
 
 (('tag:center'))
@@ -428,18 +428,19 @@ milterを管理するmilter
 = マルチプロセス
 
   * (('wait'))マスタープロセス
-    * (({listen()}))
-    * (({fork()}))
+    (1) (({listen()}))
+    (2) (({fork()}))
   * (('wait'))ワーカープロセス
-    * (({accept()}))
-    * ↑のクライアントの処理
+    (1) (({accept()}))
+    (2) ↑したクライアントの処理
 
 (('tag:center'))
 (('note:milter managerへのRubyの組み込み'))
 
 = Ruby組み込みと(({fork()}))
 
-  * ワーカープロセスがクラッシュ
+  * (({fork()}))すると\n
+    ワーカープロセスがクラッシュ
     * プロセス終了時とか
   * (('wait'))ヒント：(({fork()}))とスレッド
 
@@ -479,6 +480,13 @@ milterを管理するmilter
 (('tag:center'))
 (('note:milter managerへのRubyの組み込み'))
 
+= イベントループとシグナル
+
+xxx
+
+(('tag:center'))
+(('note:milter managerへのRubyの組み込み'))
+
 = Rubyの組み込みのまとめ
 
   * Rubyを組み込む実装方法を紹介
@@ -488,24 +496,45 @@ milterを管理するmilter
 (('tag:center'))
 (('note:Rubyの組み込み'))
 
-= おまけ
+= mrubyの組み込み
 
-mrubyの組み込み
+実例\n
+Groonga\n
+(('note:Since 2013'))
 
-= GroongaとmrubyとGC
+= Groongaとmruby
 
   * Groonga
     * 全文検索エンジン（mruby組み込み）
     * (('wait'))高速に検索結果を返し続けたい
     * (('wait'))リソース消費は波がない方がよい\n
       (('note:例：いらなくなったメモリーはすぐに解放'))
-  * (('wait'))GC
-    * メモリーが足りなくなったら解放
 
 (('tag:center'))
 (('note:mrubyの組み込み'))
 
-= GroongaでのGCの方針
+= リソース消費
+
+  # image
+  # src = images/groonga-memory-usage.svg
+  # relative_height = 90
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= メモリー管理
+
+  * Groonga
+    * (('wait'))必要なときに確保
+    * (('wait'))いらなくなったら解放
+  * mruby
+    * (('wait'))GC
+    * (('wait'))メモリーが足りなくなったら解放
+
+(('tag:center'))
+(('note:mrubyの組み込み'))
+
+= GroongaとmrubyのGC
 
   * mrubyのGCにGroongaのリソース管理を任せない
     * リソース管理：\n
@@ -559,8 +588,17 @@ mrubyの組み込み
 = mruby組み込みのまとめ
 
   * GCに任せないという選択
-    * リソース消費を安定させるため
+    * 使用メモリー量を安定させるため
     * 安定した性能を出すため
 
 (('tag:center'))
 (('note:mrubyの組み込み'))
+
+= まとめ
+
+  * Rubyの組み込み
+    * (('wait'))ガッツリ連携するつもりで設計\n
+      (('note:拡張ライブラリーで十分じゃないかよく検討すること'))
+  * mrubyの組み込み
+    * (('wait'))アプリの大事な事を忘れないで設計
+  * (('wait'))OSS Gateもよろしく
