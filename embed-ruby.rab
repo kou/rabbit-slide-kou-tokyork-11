@@ -460,13 +460,13 @@ milterを管理するmilter
 = スレッドのケア
 
   # coderay c
-  VALUE pid;
+  VALUE rb_pid;
   /* タイマースレッドの後始末とか
      した上でfork */
-  pid = rb_funcall(rb_mKernel,
-                   rb_intern("fork"),
-                   0);
-  return NUM2INT(pid);
+  rb_pid = rb_funcall(rb_mKernel,
+                      rb_intern("fork"),
+                      0);
+  return NUM2INT(rb_pid);
 
 (('tag:center'))
 (('note:milter managerへのRubyの組み込み'))
